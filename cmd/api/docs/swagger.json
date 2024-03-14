@@ -1,0 +1,41 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Backend for the mobile app `Logbook` made with Echo and Golang",
+        "title": "Logbook Backend API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "returns `Hello World`",
+                "tags": [
+                    "default"
+                ],
+                "summary": "Hello World Route",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "get the database health",
+                "tags": [
+                    "default"
+                ],
+                "summary": "Returns the database health",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: Backend for the mobile app `Logbook` made with Echo and Golang
+  title: Logbook Backend API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: returns `Hello World`
+      responses:
+        "200":
+          description: OK
+      summary: Hello World Route
+      tags:
+      - default
+  /health:
+    get:
+      description: get the database health
+      responses:
+        "200":
+          description: OK
+      summary: Returns the database health
+      tags:
+      - default
+swagger: "2.0"
