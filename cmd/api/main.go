@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"logbook-backend/internal/server"
+
+	"github.com/ZondaF12/logbook-backend/internal/server"
 )
 
 func main() {

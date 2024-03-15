@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	_ "logbook-backend/cmd/api/docs"
+	_ "github.com/ZondaF12/logbook-backend/cmd/api/docs"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

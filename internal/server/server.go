@@ -7,9 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/ZondaF12/logbook-backend/internal/database"
 	_ "github.com/joho/godotenv/autoload"
-
-	"logbook-backend/internal/database"
 )
 
 type Server struct {
