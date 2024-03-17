@@ -26,11 +26,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.GET("/", s.HelloWorldHandler)
 	e.GET("/health", s.HealthHandler)
-
+	e.POST("/register", s.RegisterHandler)
+	
 	// Auth Routes
 	auth := e.Group("/auth")
-	auth.POST("/register", s.RegisterHandler)
-	auth.POST("/login", s.LoginHandler)
+	auth.Use(middleware.BasicAuth(s.UserAuthenticateByCredentials))
+	auth.GET("/self", s.GetSelfHandler)
 
 	return e
 }

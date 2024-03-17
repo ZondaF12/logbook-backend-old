@@ -29,27 +29,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/login": {
-            "post": {
-                "description": "Login a user",
+        "/auth/self": {
+            "get": {
+                "description": "Returns the authenticated user",
                 "tags": [
                     "auth"
                 ],
-                "summary": "Login Route",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/auth/register": {
-            "post": {
-                "description": "Register a new user",
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Register Route",
+                "summary": "Get Authenticated User",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -64,6 +50,20 @@ const docTemplate = `{
                     "default"
                 ],
                 "summary": "Returns the database health",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Register a new user",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register Route",
                 "responses": {
                     "200": {
                         "description": "OK"

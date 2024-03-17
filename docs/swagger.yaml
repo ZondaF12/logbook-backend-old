@@ -10,22 +10,13 @@ paths:
       summary: Hello World Route
       tags:
       - default
-  /auth/login:
-    post:
-      description: Login a user
+  /auth/self:
+    get:
+      description: Returns the authenticated user
       responses:
         "200":
           description: OK
-      summary: Login Route
-      tags:
-      - auth
-  /auth/register:
-    post:
-      description: Register a new user
-      responses:
-        "200":
-          description: OK
-      summary: Register Route
+      summary: Get Authenticated User
       tags:
       - auth
   /health:
@@ -37,4 +28,13 @@ paths:
       summary: Returns the database health
       tags:
       - default
+  /register:
+    post:
+      description: Register a new user
+      responses:
+        "200":
+          description: OK
+      summary: Register Route
+      tags:
+      - auth
 swagger: "2.0"

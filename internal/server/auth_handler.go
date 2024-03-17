@@ -16,7 +16,7 @@ import (
 //	@Description	Register a new user
 //	@Tags			auth
 //	@Success		200
-//	@Router			/auth/register [post]
+//	@Router			/register [post]
 func (s *Server) RegisterHandler(c echo.Context) error {
 	newUser := database.User{} // Slice of User instances
 
@@ -34,32 +34,18 @@ func (s *Server) RegisterHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
-// Login godoc
-//
-//	@Summary		Login Route
-//	@Description	Login a user
-//	@Tags			auth
-//	@Success		200
-//	@Router			/auth/login [post]
-func (s *Server) LoginHandler(c echo.Context) error {
-	user := database.User{} // Slice of User instances
-
-	err := json.NewDecoder(c.Request().Body).Decode(&user)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	res := s.db.GetUserByEmail(user.Email)
-	valid := auth.ComparePasswords(res.Password, []byte(user.Password))
+func (s *Server) UserAuthenticateByCredentials(username, password string, c echo.Context) (bool, error) {
+	res := s.db.GetUserByEmail(username)
+	valid := auth.ComparePasswords(res.Password, []byte(password))
 
 	if !valid {
-		return c.JSON(http.StatusForbidden, map[string]string{
+		return false, c.JSON(http.StatusForbidden, map[string]string{
 			"message": "Invalid Credentials",
 		})
 	}
 
 	session := s.db.CreateSession(res)
+	c.Set("session", session)
 
-	return c.JSON(http.StatusOK, session)
+	return true, nil
 }
