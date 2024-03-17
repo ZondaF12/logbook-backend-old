@@ -1,13 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Backend for the mobile app `Logbook` made with Echo and Golang",
-        "title": "Logbook Backend API",
-        "contact": {},
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8080",
-    "basePath": "/api/v1",
     "paths": {
         "/": {
             "get": {
@@ -16,6 +11,34 @@
                     "default"
                 ],
                 "summary": "Hello World Route",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Login a user",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login Route",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Register a new user",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register Route",
                 "responses": {
                     "200": {
                         "description": "OK"

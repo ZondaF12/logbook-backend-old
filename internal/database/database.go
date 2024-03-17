@@ -14,6 +14,13 @@ import (
 
 type Service interface {
 	Health() map[string]string
+	Handlers
+}
+
+type Handlers interface {
+	AddUserToDB(params User) map[string]string
+	GetUserByEmail(email string) User
+	CreateSession(user User) Session
 }
 
 type service struct {

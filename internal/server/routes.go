@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	_ "github.com/ZondaF12/logbook-backend/cmd/api/docs"
+	_ "github.com/ZondaF12/logbook-backend/docs"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -22,23 +22,26 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 	e.Use(middleware.Recover())
 
+	// Default Routes
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	e.GET("/", s.HelloWorldHandler)
+	e.GET("/health", s.HealthHandler)
 
-	// grouped routes
-	g := e.Group("/api/v1")
-	g.GET("/", s.HelloWorldHandler)
-	g.GET("/health", s.healthHandler)
+	// Auth Routes
+	auth := e.Group("/auth")
+	auth.POST("/register", s.RegisterHandler)
+	auth.POST("/login", s.LoginHandler)
 
 	return e
 }
 
 // HelloWorld godoc
 //
-//	@Summary		Hello World Route
-//	@Description	returns `Hello World`
-//	@Tags			default
-//	@Success		200
-//	@Router			/ [get]
+// @Summary		Hello World Route
+// @Description	returns `Hello World`
+// @Tags			default
+// @Success		200
+// @Router			/ [get]
 func (s *Server) HelloWorldHandler(c echo.Context) error {
 	resp := map[string]string{
 		"message": "Hello World",
@@ -49,11 +52,11 @@ func (s *Server) HelloWorldHandler(c echo.Context) error {
 
 // Health godoc
 //
-//	@Summary		Returns the database health
-//	@Description	get the database health
-//	@Tags			default
-//	@Success		200
-//	@Router			/health [get]
-func (s *Server) healthHandler(c echo.Context) error {
+// @Summary		Returns the database health
+// @Description	get the database health
+// @Tags			default
+// @Success		200
+// @Router			/health [get]
+func (s *Server) HealthHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, s.db.Health())
 }

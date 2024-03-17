@@ -8,6 +8,11 @@ build:
 	
 	@go build -o main cmd/api/main.go
 
+# Generate Swagger docs
+swagger:
+	@echo "Generating docs..."
+	@swag init --dir ./cmd/api,./internal/server,./internal/database
+
 # Run the application
 run:
 	@go run cmd/api/main.go
