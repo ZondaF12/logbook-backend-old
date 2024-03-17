@@ -27,7 +27,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/", s.HelloWorldHandler)
 	e.GET("/health", s.HealthHandler)
 	e.POST("/register", s.RegisterHandler)
-	
+
 	// Auth Routes
 	auth := e.Group("/auth")
 	auth.Use(middleware.BasicAuth(s.UserAuthenticateByCredentials))

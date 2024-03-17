@@ -4,22 +4,15 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ZondaF12/logbook-backend/internal/models"
 	"github.com/google/uuid"
 )
 
-type Session struct {
-	UserID      uuid.UUID `json:"user_id"`
-	Token       uuid.UUID `json:"access_token"`
-	ExpiryDate  time.Time `json:"expiry_date"`
-	CreatedAt   time.Time `json:"created_at"`
-	RefreshDate time.Time `json:"refresh_date"`
-}
-
-func (s *service) CreateSession(user User) Session {
-	session := Session{
+func (s *service) CreateSession(user models.User) models.Session {
+	session := models.Session{
 		UserID:      user.ID,
 		Token:       uuid.New(),
-		ExpiryDate:  time.Now().Add(time.Hour * 72),
+		ExpiryDate:  time.Now().Add(time.Hour * 24 * 3),
 		CreatedAt:   time.Now(),
 		RefreshDate: time.Now().Add(time.Hour * 24),
 	}

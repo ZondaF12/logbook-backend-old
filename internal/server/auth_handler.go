@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/ZondaF12/logbook-backend/internal/auth"
-	"github.com/ZondaF12/logbook-backend/internal/database"
+	"github.com/ZondaF12/logbook-backend/internal/models"
 	"github.com/labstack/echo/v4"
 )
 
@@ -18,7 +18,7 @@ import (
 //	@Success		200
 //	@Router			/register [post]
 func (s *Server) RegisterHandler(c echo.Context) error {
-	newUser := database.User{} // Slice of User instances
+	newUser := models.User{} // Slice of User instances
 
 	err := json.NewDecoder(c.Request().Body).Decode(&newUser)
 	if err != nil {

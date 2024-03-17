@@ -3,20 +3,9 @@ package server
 import (
 	"net/http"
 
-	"github.com/ZondaF12/logbook-backend/internal/database"
+	"github.com/ZondaF12/logbook-backend/internal/models"
 	"github.com/labstack/echo/v4"
 )
-
-type Self struct {
-	SelfUser
-	database.Session
-}
-
-type SelfUser struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
-}
-
 
 // Self godoc
 //
@@ -30,14 +19,14 @@ func (s *Server) GetSelfHandler(c echo.Context) error {
 
 	res := s.db.GetUserByEmail(email)
 
-	user := SelfUser{
+	user := models.SelfUser{
 		Email: res.Email,
 		Name:  res.Name,
 	}
 
-	resp := Self{
+	resp := models.Self{
 		SelfUser: user,
-		Session:  c.Get("session").(database.Session),
+		Session:  c.Get("session").(models.Session),
 	}
 
 	return c.JSON(http.StatusOK, resp)

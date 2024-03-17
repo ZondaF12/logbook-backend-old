@@ -4,18 +4,12 @@ import (
 	"fmt"
 
 	"github.com/ZondaF12/logbook-backend/internal/auth"
+	"github.com/ZondaF12/logbook-backend/internal/models"
 	"github.com/google/uuid"
 )
 
-type User struct {
-	ID       uuid.UUID `json:"id"`
-	Email    string    `json:"email"`
-	Name     string    `json:"name"`
-	Password string    `json:"password"`
-}
-
-func (s *service) GetUserByEmail(email string) User {
-	var user User
+func (s *service) GetUserByEmail(email string) models.User {
+	var user models.User
 	sqlStatement := `SELECT * FROM users WHERE email=$1`
 	row := s.db.QueryRow(sqlStatement, email)
 	err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Name)
@@ -25,7 +19,7 @@ func (s *service) GetUserByEmail(email string) User {
 	return user
 }
 
-func (s *service) AddUserToDB(params User) map[string]string {
+func (s *service) AddUserToDB(params models.User) map[string]string {
 	exists := s.GetUserByEmail(params.Email)
 	if exists.Email != "" {
 		return map[string]string{

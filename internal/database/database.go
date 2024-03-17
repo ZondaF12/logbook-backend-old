@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/ZondaF12/logbook-backend/internal/models"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -18,9 +19,9 @@ type Service interface {
 }
 
 type Handlers interface {
-	AddUserToDB(params User) map[string]string
-	GetUserByEmail(email string) User
-	CreateSession(user User) Session
+	AddUserToDB(params models.User) map[string]string
+	GetUserByEmail(email string) models.User
+	CreateSession(user models.User) models.Session
 }
 
 type service struct {
