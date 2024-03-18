@@ -25,6 +25,7 @@ func (s *Server) GetSelfHandler(c echo.Context) error {
 		ID:    res.ID,
 		Email: res.Email,
 		Name:  res.Name,
+		Role:  res.Role,
 	}
 
 	return c.JSON(http.StatusOK, session)
