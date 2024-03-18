@@ -19,6 +19,17 @@ func (s *service) GetUserByEmail(email string) models.User {
 	return user
 }
 
+func (s *service) GetUserByID(id uuid.UUID) models.User {
+	var user models.User
+	sqlStatement := `SELECT * FROM users WHERE id=$1`
+	row := s.db.QueryRow(sqlStatement, id)
+	err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Name)
+	if err != nil {
+		fmt.Println("No user found")
+	}
+	return user
+}
+
 func (s *service) AddUserToDB(params models.User) map[string]string {
 	exists := s.GetUserByEmail(params.Email)
 	if exists.Email != "" {

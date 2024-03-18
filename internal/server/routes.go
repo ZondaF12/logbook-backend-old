@@ -2,9 +2,13 @@ package server
 
 import (
 	"net/http"
+	"os"
 
 	_ "github.com/ZondaF12/logbook-backend/docs"
+	"github.com/ZondaF12/logbook-backend/internal/models"
+	"github.com/golang-jwt/jwt/v5"
 
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger" // echo-swagger middleware
@@ -14,7 +18,7 @@ import (
 // @version		1.0
 // @description	Backend for the mobile app `Logbook` made with Echo and Golang
 // @host			localhost:8080
-// @BasePath		/api/v1
+// @BasePath		/
 func (s *Server) RegisterRoutes() http.Handler {
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -28,9 +32,24 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/health", s.HealthHandler)
 	e.POST("/register", s.RegisterHandler)
 
+	login := e.Group("/login")
+	login.Use(middleware.BasicAuth(s.UserAuthenticateByCredentials))
+	login.POST("", func(c echo.Context) error {
+		token := c.Get("token")
+		return c.JSON(http.StatusOK, echo.Map{
+			"token": token,
+		})
+	})
+
 	// Auth Routes
+	config := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(models.JwtCustomClaims)
+		},
+		SigningKey: []byte(os.Getenv("JWT_SECRET")),
+	}
 	auth := e.Group("/auth")
-	auth.Use(middleware.BasicAuth(s.UserAuthenticateByCredentials))
+	auth.Use(echojwt.WithConfig(config))
 	auth.GET("/self", s.GetSelfHandler)
 
 	return e

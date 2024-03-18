@@ -7,6 +7,7 @@ import (
 
 	"github.com/ZondaF12/logbook-backend/internal/auth"
 	"github.com/ZondaF12/logbook-backend/internal/models"
+	"github.com/ZondaF12/logbook-backend/internal/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -44,8 +45,14 @@ func (s *Server) UserAuthenticateByCredentials(username, password string, c echo
 		})
 	}
 
-	session := s.db.CreateSession(res)
-	c.Set("session", session)
+	token, err := utils.GenerateToken(res)
+	if err != nil {
+		return false, c.JSON(http.StatusForbidden, map[string]string{
+			"message": "Invalid Credentials",
+		})
+	}
+
+	c.Set("token", token)
 
 	return true, nil
 }

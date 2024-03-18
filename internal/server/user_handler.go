@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ZondaF12/logbook-backend/internal/models"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,19 +16,16 @@ import (
 //	@Success		200
 //	@Router			/auth/self [get]
 func (s *Server) GetSelfHandler(c echo.Context) error {
-	email, _, _ := c.Request().BasicAuth()
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*models.JwtCustomClaims)
 
-	res := s.db.GetUserByEmail(email)
+	res := s.db.GetUserByID(claims.ID)
 
-	user := models.SelfUser{
+	session := models.SelfUser{
+		ID:    res.ID,
 		Email: res.Email,
 		Name:  res.Name,
 	}
 
-	resp := models.Self{
-		SelfUser: user,
-		Session:  c.Get("session").(models.Session),
-	}
-
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusOK, session)
 }

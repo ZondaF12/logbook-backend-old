@@ -13,8 +13,9 @@ type (
 	}
 
 	SelfUser struct {
-		Email string `json:"email"`
-		Name  string `json:"name"`
+		ID    uuid.UUID `json:"id"`
+		Email string    `json:"email"`
+		Name  string    `json:"name"`
 	}
 
 	Self struct {

@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -12,4 +13,9 @@ type Session struct {
 	ExpiryDate  time.Time `json:"expiry_date"`
 	CreatedAt   time.Time `json:"created_at"`
 	RefreshDate time.Time `json:"refresh_date"`
+}
+
+type JwtCustomClaims struct {
+	ID uuid.UUID `json:"id"`
+	jwt.RegisteredClaims
 }

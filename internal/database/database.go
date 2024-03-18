@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/ZondaF12/logbook-backend/internal/models"
+	"github.com/google/uuid"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -21,6 +22,7 @@ type Service interface {
 type Handlers interface {
 	AddUserToDB(params models.User) map[string]string
 	GetUserByEmail(email string) models.User
+	GetUserByID(id uuid.UUID) models.User
 	CreateSession(user models.User) models.Session
 }
 
