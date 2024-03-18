@@ -12,7 +12,7 @@ import (
 //
 //	@Summary		Get Authenticated User
 //	@Description	Returns the authenticated user
-//	@Tags			auth
+//	@Tags			user
 //	@Success		200
 //	@Router			/auth/self [get]
 func (s *Server) GetSelfHandler(c echo.Context) error {

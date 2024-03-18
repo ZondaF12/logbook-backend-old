@@ -33,7 +33,7 @@ const docTemplate = `{
             "get": {
                 "description": "Returns the authenticated user",
                 "tags": [
-                    "auth"
+                    "user"
                 ],
                 "summary": "Get Authenticated User",
                 "responses": {
@@ -50,6 +50,20 @@ const docTemplate = `{
                     "default"
                 ],
                 "summary": "Returns the database health",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Logs in a user",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login Route",
                 "responses": {
                     "200": {
                         "description": "OK"

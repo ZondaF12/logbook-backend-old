@@ -34,12 +34,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	login := e.Group("/login")
 	login.Use(middleware.BasicAuth(s.UserAuthenticateByCredentials))
-	login.POST("", func(c echo.Context) error {
-		token := c.Get("token")
-		return c.JSON(http.StatusOK, echo.Map{
-			"token": token,
-		})
-	})
+	login.POST("", s.LoginHandler)
 
 	// Auth Routes
 	config := echojwt.Config{

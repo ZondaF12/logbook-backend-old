@@ -35,6 +35,20 @@ func (s *Server) RegisterHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+// Login godoc
+//
+//	@Summary		Login Route
+//	@Description	Logs in a user
+//	@Tags			auth
+//	@Success		200
+//	@Router			/login [post]
+func (s *Server) LoginHandler(c echo.Context) error {
+	token := c.Get("token")
+	return c.JSON(http.StatusOK, echo.Map{
+		"token": token,
+	})
+}
+
 func (s *Server) UserAuthenticateByCredentials(username, password string, c echo.Context) (bool, error) {
 	res := s.db.GetUserByEmail(username)
 	valid := auth.ComparePasswords(res.Password, []byte(password))

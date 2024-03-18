@@ -18,7 +18,7 @@ paths:
           description: OK
       summary: Get Authenticated User
       tags:
-      - auth
+      - user
   /health:
     get:
       description: get the database health
@@ -28,6 +28,15 @@ paths:
       summary: Returns the database health
       tags:
       - default
+  /login:
+    post:
+      description: Logs in a user
+      responses:
+        "200":
+          description: OK
+      summary: Login Route
+      tags:
+      - auth
   /register:
     post:
       description: Register a new user
