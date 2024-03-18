@@ -23,7 +23,6 @@ type Handlers interface {
 	AddUserToDB(params models.User) map[string]string
 	GetUserByEmail(email string) models.User
 	GetUserByID(id uuid.UUID) models.User
-	CreateSession(user models.User) models.Session
 }
 
 type service struct {
