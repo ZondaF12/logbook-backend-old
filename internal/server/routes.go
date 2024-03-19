@@ -54,9 +54,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 //
 // @Summary		Hello World Route
 // @Description	returns `Hello World`
-// @Tags			default
-// @Success		200
-// @Router			/ [get]
+// @Tags		default
+// @Success		200 {string} message
+// @Router		/ [get]
 func (s *Server) HelloWorldHandler(c echo.Context) error {
 	resp := map[string]string{
 		"message": "Hello World",
@@ -69,9 +69,9 @@ func (s *Server) HelloWorldHandler(c echo.Context) error {
 //
 // @Summary		Returns the database health
 // @Description	get the database health
-// @Tags			default
-// @Success		200
-// @Router			/health [get]
+// @Tags		default
+// @Success		200 {string} message
+// @Router		/health [get]
 func (s *Server) HealthHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, s.db.Health())
 }

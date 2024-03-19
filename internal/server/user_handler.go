@@ -13,7 +13,7 @@ import (
 //	@Summary		Get Authenticated User
 //	@Description	Returns the authenticated user
 //	@Tags			user
-//	@Success		200
+//	@Success		200 {object} models.SelfUser
 //	@Router			/auth/self [get]
 func (s *Server) GetSelfHandler(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)

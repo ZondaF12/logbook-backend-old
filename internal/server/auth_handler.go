@@ -16,7 +16,7 @@ import (
 //	@Summary		Register Route
 //	@Description	Register a new user
 //	@Tags			auth
-//	@Success		200
+//	@Success		200 {string} message
 //	@Router			/register [post]
 func (s *Server) RegisterHandler(c echo.Context) error {
 	newUser := models.User{} // Slice of User instances
@@ -40,12 +40,12 @@ func (s *Server) RegisterHandler(c echo.Context) error {
 //	@Summary		Login Route
 //	@Description	Logs in a user
 //	@Tags			auth
-//	@Success		200
+//	@Success		200 {object} models.Token
 //	@Router			/login [post]
 func (s *Server) LoginHandler(c echo.Context) error {
 	token := c.Get("token")
-	return c.JSON(http.StatusOK, echo.Map{
-		"token": token,
+	return c.JSON(http.StatusOK, models.Token{
+		Token: token.(string),
 	})
 }
 

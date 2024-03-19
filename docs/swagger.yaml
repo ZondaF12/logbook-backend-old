@@ -1,3 +1,20 @@
+definitions:
+  models.SelfUser:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+    type: object
+  models.Token:
+    properties:
+      token:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -7,6 +24,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       summary: Hello World Route
       tags:
       - default
@@ -16,6 +35,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/models.SelfUser'
       summary: Get Authenticated User
       tags:
       - user
@@ -25,6 +46,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       summary: Returns the database health
       tags:
       - default
@@ -34,6 +57,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/models.Token'
       summary: Login Route
       tags:
       - auth
@@ -43,6 +68,8 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
       summary: Register Route
       tags:
       - auth

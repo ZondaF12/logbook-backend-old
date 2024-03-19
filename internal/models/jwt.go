@@ -5,8 +5,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type JwtCustomClaims struct {
-	ID uuid.UUID `json:"id"`
-	Role string `json:"role"`
-	jwt.RegisteredClaims
-}
+type (
+	JwtCustomClaims struct {
+		ID   uuid.UUID `json:"id"`
+		Role string    `json:"role"`
+		jwt.RegisteredClaims
+	}
+
+	Token struct {
+		Token string `json:"token"`
+	}
+)

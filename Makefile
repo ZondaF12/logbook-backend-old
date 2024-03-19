@@ -11,7 +11,7 @@ build:
 # Generate Swagger docs
 swagger:
 	@echo "Generating docs..."
-	@swag init --dir ./cmd/api,./internal/server,./internal/database
+	@swag init --dir ./cmd/api,./internal/server,./internal/database,./internal/models
 
 # Run the application
 run:

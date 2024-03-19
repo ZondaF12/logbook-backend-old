@@ -13,7 +13,7 @@ var secretKey = []byte(os.Getenv("JWT_SECRET"))
 func GenerateToken(user models.User) (string, error) {
 	// Set custom claims
 	claims := &models.JwtCustomClaims{
-		ID: user.ID,
+		ID:   user.ID,
 		Role: user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 3)),
