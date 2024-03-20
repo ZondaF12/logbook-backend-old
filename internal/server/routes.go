@@ -46,6 +46,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	auth := e.Group("/auth")
 	auth.Use(echojwt.WithConfig(config))
 	auth.GET("/self", s.GetSelfHandler)
+	auth.GET("/users", s.GetUsersHandler)
 
 	return e
 }

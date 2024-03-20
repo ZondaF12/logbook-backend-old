@@ -40,6 +40,19 @@ paths:
       summary: Get Authenticated User
       tags:
       - user
+  /auth/users:
+    get:
+      description: Returns a list of all users
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SelfUser'
+            type: array
+      summary: Get All Users
+      tags:
+      - user
   /health:
     get:
       description: get the database health

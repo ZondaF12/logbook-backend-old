@@ -52,3 +52,33 @@ func (s *service) AddUserToDB(params models.User) map[string]string {
 		"message": "User Created Successfully",
 	}
 }
+
+func (s *service) GetUsers() []models.SelfUser {
+	sqlStatement := `SELECT * FROM users`
+	rows, err := s.db.Query(sqlStatement)
+
+	if err != nil {
+		fmt.Println("No users found")
+	}
+	defer rows.Close()
+
+	var users []models.SelfUser
+	for rows.Next() {
+		var user models.User
+		err = rows.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Role)
+		if err != nil {
+			fmt.Println("Error scanning rows")
+		}
+
+		// Remove password from response
+		selfUser := models.SelfUser{
+			ID:    user.ID,
+			Email: user.Email,
+			Name:  user.Name,
+			Role:  user.Role,
+		}
+
+		users = append(users, selfUser)
+	}
+	return users
+}

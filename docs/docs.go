@@ -49,6 +49,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/users": {
+            "get": {
+                "description": "Returns a list of all users",
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get All Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SelfUser"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "get the database health",
