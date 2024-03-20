@@ -53,6 +53,17 @@ paths:
       summary: Get All Users
       tags:
       - user
+  /auth/users/:id:
+    get:
+      description: Returns a user object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SelfUser'
+      summary: Get a User by ID
+      tags:
+      - user
   /health:
     get:
       description: get the database health

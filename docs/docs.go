@@ -69,6 +69,23 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/users/:id": {
+            "get": {
+                "description": "Returns a user object",
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get a User by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SelfUser"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "get the database health",
