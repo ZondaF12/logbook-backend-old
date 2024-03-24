@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -10,24 +11,39 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func (s *Server) AddNewUserHandler(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*models.JwtCustomClaims)
+
+	newUser := models.User{
+		ID: claims.ID,
+	}
+
+	err := json.NewDecoder(c.Request().Body).Decode(&newUser)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	res := s.db.AddNewUserToDB(newUser)
+
+	return c.JSON(http.StatusOK, res)
+}
+
 // Self godoc
 //
 //	@Summary		Get Authenticated User
 //	@Description	Returns the authenticated user
 //	@Tags			user
-//	@Success		200 {object} models.SelfUser
+//	@Success		200 {object} models.User
 //	@Router			/auth/self [get]
 func (s *Server) GetSelfHandler(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*models.JwtCustomClaims)
 
-	res := s.db.GetUserByID(claims.ID)
-
-	self := models.SelfUser{
-		ID:    res.ID,
-		Email: res.Email,
-		Name:  res.Name,
-		Role:  res.Role,
+	self, err := s.db.GetUserByID(claims.ID)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, self)
@@ -38,7 +54,7 @@ func (s *Server) GetSelfHandler(c echo.Context) error {
 //	@Summary		Get All Users
 //	@Description	Returns a list of all users
 //	@Tags			user
-//	@Success		200 {array} models.SelfUser
+//	@Success		200 {array} models.User
 //	@Router			/auth/users [get]
 func (s *Server) GetUsersHandler(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
@@ -59,7 +75,8 @@ func (s *Server) GetUsersHandler(c echo.Context) error {
 //	@Summary		Get a User by ID
 //	@Description	Returns a user object
 //	@Tags			user
-//	@Success		200 {object} models.SelfUser
+//	@Success		200 {object} models.User
+//	@Error			403 {string} message
 //	@Router			/auth/users/:id [get]
 func (s *Server) GetUserByIDHandler(c echo.Context) error {
 	id := c.Param("id")
@@ -69,14 +86,32 @@ func (s *Server) GetUserByIDHandler(c echo.Context) error {
 		return err
 	}
 
-	res := s.db.GetUserByID(uuid)
-
-	user := models.SelfUser{
-		ID:    res.ID,
-		Email: res.Email,
-		Name:  res.Name,
-		Role:  res.Role,
+	user, err := s.db.GetUserByID(uuid)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, user)
+}
+
+func (s *Server) UpdateUserByIDHandler(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*models.JwtCustomClaims)
+
+	newSelf := models.User{
+		ID: claims.ID,
+	}
+
+	err := json.NewDecoder(c.Request().Body).Decode(&newSelf)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	updatedSelf, err := s.db.UpdateUserByID(claims.ID, newSelf)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, updatedSelf)
 }

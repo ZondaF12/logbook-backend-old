@@ -45,11 +45,18 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}
 	auth := e.Group("/auth")
 	auth.Use(echojwt.WithConfig(config))
+
+	// Self Routes
 	auth.GET("/self", s.GetSelfHandler)
+	auth.POST("/self", s.AddNewUserHandler)
+	auth.PUT("/self", s.UpdateUserByIDHandler)
 
 	// Users Routes
 	auth.GET("/users", s.GetUsersHandler)
 	auth.GET("/users/:id", s.GetUserByIDHandler)
+
+	auth.GET("/vehicles", s.GetVehiclesHandler)
+	auth.POST("/vehicles", s.AddVehicleHandler)
 
 	return e
 }

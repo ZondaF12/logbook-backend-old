@@ -3,49 +3,19 @@ package database
 import (
 	"fmt"
 
-	"github.com/ZondaF12/logbook-backend/internal/auth"
 	"github.com/ZondaF12/logbook-backend/internal/models"
 	"github.com/google/uuid"
 )
 
-func (s *service) GetUserByEmail(email string) models.User {
-	var user models.User
-	sqlStatement := `SELECT * FROM users WHERE email=$1`
-	row := s.db.QueryRow(sqlStatement, email)
-	err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Role)
+func (s *service) AddNewUserToDB(user models.User) map[string]string {
+	sqlStatement := `INSERT INTO users (id, username, name) VALUES ($1, $2, $3)`
+	_, err := s.db.Exec(sqlStatement, &user.ID, &user.Username, &user.Name)
+	fmt.Println(user)
 	if err != nil {
-		fmt.Println("No user found")
-	}
-	return user
-}
-
-func (s *service) GetUserByID(id uuid.UUID) models.User {
-	var user models.User
-	sqlStatement := `SELECT * FROM users WHERE id=$1`
-	row := s.db.QueryRow(sqlStatement, id)
-	err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Role)
-	if err != nil {
-		fmt.Println("No user found")
-	}
-	return user
-}
-
-func (s *service) AddUserToDB(params models.User) map[string]string {
-	exists := s.GetUserByEmail(params.Email)
-	if exists.Email != "" {
+		fmt.Println(err)
 		return map[string]string{
 			"message": "User already exists",
 		}
-	}
-
-	hash := auth.HashAndSalt([]byte(params.Password))
-
-	sqlStatement := `INSERT INTO users (id, email, password, name, role) VALUES ($1, $2, $3, $4, $5)`
-	_, err := s.db.Exec(sqlStatement, uuid.NewString(), params.Email, hash, params.Name, "user")
-	if err != nil {
-		fmt.Println("\nRow not inserted!")
-	} else {
-		fmt.Println("\nRow inserted successfully!")
 	}
 
 	return map[string]string{
@@ -53,32 +23,52 @@ func (s *service) AddUserToDB(params models.User) map[string]string {
 	}
 }
 
-func (s *service) GetUsers() []models.SelfUser {
+func (s *service) GetUsers() []models.User {
 	sqlStatement := `SELECT * FROM users`
 	rows, err := s.db.Query(sqlStatement)
-
 	if err != nil {
 		fmt.Println("No users found")
 	}
 	defer rows.Close()
 
-	var users []models.SelfUser
+	var users []models.User
 	for rows.Next() {
 		var user models.User
-		err = rows.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Role)
+		err := rows.Scan(&user.ID, &user.Username, &user.Bio, &user.Name, &user.Avatar, &user.Public, &user.CreatedAt)
 		if err != nil {
 			fmt.Println("Error scanning rows")
 		}
 
-		// Remove password from response
-		selfUser := models.SelfUser{
-			ID:    user.ID,
-			Email: user.Email,
-			Name:  user.Name,
-			Role:  user.Role,
-		}
-
-		users = append(users, selfUser)
+		users = append(users, user)
 	}
 	return users
+}
+
+func (s *service) GetUserByID(id uuid.UUID) (models.User, error) {
+	var user models.User
+
+	sqlStatement := `SELECT * FROM users WHERE id=$1`
+	row := s.db.QueryRow(sqlStatement, id)
+
+	err := row.Scan(&user.ID, &user.Username, &user.Bio, &user.Name, &user.Avatar, &user.Public, &user.CreatedAt)
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
+func (s *service) UpdateUserByID(id uuid.UUID, user models.User) (models.User, error) {
+	sqlStatement := `UPDATE users SET bio=$1, name=$2, avatar=$3, public=$4 WHERE id=$5`
+	_, err := s.db.Exec(sqlStatement, user.Bio, user.Name, user.Avatar, user.Public, id)
+	if err != nil {
+		return user, err
+	}
+
+	self, err := s.GetUserByID(id)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	return self, nil
 }

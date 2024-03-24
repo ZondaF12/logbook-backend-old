@@ -10,7 +10,7 @@ import (
 
 var secretKey = []byte(os.Getenv("JWT_SECRET"))
 
-func GenerateToken(user models.User) (string, error) {
+func GenerateToken(user models.UserAuth) (string, error) {
 	// Set custom claims
 	claims := &models.JwtCustomClaims{
 		ID:   user.ID,

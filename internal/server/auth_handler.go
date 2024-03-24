@@ -19,7 +19,7 @@ import (
 //	@Success		200 {string} message
 //	@Router			/register [post]
 func (s *Server) RegisterHandler(c echo.Context) error {
-	newUser := models.User{} // Slice of User instances
+	newUser := models.UserAuth{} // Slice of User instances
 
 	err := json.NewDecoder(c.Request().Body).Decode(&newUser)
 	if err != nil {
@@ -27,7 +27,7 @@ func (s *Server) RegisterHandler(c echo.Context) error {
 		return err
 	}
 
-	res := s.db.AddUserToDB(newUser)
+	res := s.db.AddAuthenticationToDB(newUser)
 	if res["message"] == "User already exists" {
 		return c.JSON(http.StatusForbidden, res)
 	}
@@ -50,7 +50,7 @@ func (s *Server) LoginHandler(c echo.Context) error {
 }
 
 func (s *Server) UserAuthenticateByCredentials(username, password string, c echo.Context) (bool, error) {
-	res := s.db.GetUserByEmail(username)
+	res := s.db.GetAuthenticationByEmail(username)
 	valid := auth.ComparePasswords(res.Password, []byte(password))
 
 	if !valid {

@@ -14,21 +14,34 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-type Service interface {
-	Health() map[string]string
-	Handlers
-}
+type (
+	Service interface {
+		Health() map[string]string
+		Handlers
+	}
 
-type Handlers interface {
-	AddUserToDB(params models.User) map[string]string
-	GetUserByEmail(email string) models.User
-	GetUserByID(id uuid.UUID) models.User
-	GetUsers() []models.SelfUser
-}
+	Handlers interface {
+		Authentication
+		Users
+	}
 
-type service struct {
-	db *sql.DB
-}
+	Authentication interface {
+		AddAuthenticationToDB(params models.UserAuth) map[string]string
+		GetAuthenticationByEmail(email string) models.UserAuth
+		GetAuthenticationByID(id uuid.UUID) models.UserAuth
+	}
+
+	Users interface {
+		GetUsers() []models.User
+		GetUserByID(id uuid.UUID) (models.User, error)
+		AddNewUserToDB(user models.User) map[string]string
+		UpdateUserByID(id uuid.UUID, user models.User) (models.User, error)
+	}
+
+	service struct {
+		db *sql.DB
+	}
+)
 
 var (
 	database = os.Getenv("DB_DATABASE")
