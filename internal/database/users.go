@@ -72,3 +72,13 @@ func (s *service) UpdateUserByID(id uuid.UUID, user models.User) (models.User, e
 
 	return self, nil
 }
+
+func (s *service) IsUsernameAvailable(username string) bool {
+	sqlStatement := `SELECT EXISTS(SELECT 1 FROM users WHERE username=$1)`
+	row := s.db.QueryRow(sqlStatement, username)
+
+	var exists bool
+	row.Scan(&exists)
+
+	return exists
+}

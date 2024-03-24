@@ -23,6 +23,7 @@ type (
 	Handlers interface {
 		Authentication
 		Users
+		Utils
 	}
 
 	Authentication interface {
@@ -36,6 +37,10 @@ type (
 		GetUserByID(id uuid.UUID) (models.User, error)
 		AddNewUserToDB(user models.User) map[string]string
 		UpdateUserByID(id uuid.UUID, user models.User) (models.User, error)
+	}
+
+	Utils interface {
+		IsUsernameAvailable(username string) bool
 	}
 
 	service struct {

@@ -115,3 +115,17 @@ func (s *Server) UpdateUserByIDHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, updatedSelf)
 }
+
+func (s *Server) IsUsernameAvailableHandler(c echo.Context) error {
+	username := models.Username{}
+
+	err := json.NewDecoder(c.Request().Body).Decode(&username)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	exists := s.db.IsUsernameAvailable(username.Username)
+
+	return c.JSON(http.StatusOK, exists)
+}

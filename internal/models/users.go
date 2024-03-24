@@ -33,4 +33,8 @@ type (
 		Public    bool      `json:"public,omitempty"`
 		CreatedAt time.Time `json:"created_at"`
 	}
+
+	Username struct {
+		Username string `json:"username"`
+	}
 )

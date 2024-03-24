@@ -55,9 +55,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 	auth.GET("/users", s.GetUsersHandler)
 	auth.GET("/users/:id", s.GetUserByIDHandler)
 
+	// Vehicles Routes
 	auth.GET("/vehicles", s.GetVehiclesHandler)
 	auth.POST("/vehicles", s.AddVehicleHandler)
 
+	// Utils Routes
+	auth.POST("/utils/username", s.IsUsernameAvailableHandler)
 	return e
 }
 
