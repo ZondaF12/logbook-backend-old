@@ -93,8 +93,9 @@ func (s *Server) UpdateSelfHandler(c echo.Context) error {
 //	@Summary		Is a Username Available
 //	@Description	Checks if a username is available
 //	@Tags			utils
+//	@Param			request body models.Username true "username param"
 //	@Success		200 {string} bool
-//	@Router			/auth/utils/username [get]
+//	@Router			/auth/utils/username [post]
 func (s *Server) IsUsernameAvailableHandler(c echo.Context) error {
 	username := models.Username{}
 
@@ -102,6 +103,12 @@ func (s *Server) IsUsernameAvailableHandler(c echo.Context) error {
 	if err != nil {
 		fmt.Println(err)
 		return err
+	}
+
+	if username.Username == "" {
+		return c.JSON(http.StatusForbidden, map[string]string{
+			"message": "Username cannot be empty",
+		})
 	}
 
 	exists := s.db.IsUsernameAvailable(username.Username)
