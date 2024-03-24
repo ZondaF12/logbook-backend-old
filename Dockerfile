@@ -1,4 +1,4 @@
-FROM golang:1.22 as builder
+FROM golang:1.22.1-bookworm as builder
 
 WORKDIR /
 
@@ -9,4 +9,5 @@ COPY . .
 
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN make swagger
-RUN make run
+
+CMD ["go", "run", "cmd/api/main.go"]
