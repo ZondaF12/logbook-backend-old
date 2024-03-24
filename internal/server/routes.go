@@ -48,8 +48,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// Self Routes
 	auth.GET("/self", s.GetSelfHandler)
-	auth.POST("/self", s.AddNewUserHandler)
-	auth.PUT("/self", s.UpdateUserByIDHandler)
+	auth.POST("/self", s.AddSelfHandler)
+	auth.PUT("/self", s.UpdateSelfHandler)
 
 	// Users Routes
 	auth.GET("/users", s.GetUsersHandler)

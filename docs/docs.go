@@ -36,14 +36,73 @@ const docTemplate = `{
             "get": {
                 "description": "Returns the authenticated user",
                 "tags": [
-                    "user"
+                    "self"
                 ],
                 "summary": "Get Authenticated User",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.SelfUser"
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "updates the authenticated user",
+                "tags": [
+                    "self"
+                ],
+                "summary": "Updates the Authenticated User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new user",
+                "tags": [
+                    "self"
+                ],
+                "summary": "Add New Authenticated User",
+                "parameters": [
+                    {
+                        "description": "update params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateSelf"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -62,7 +121,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.SelfUser"
+                                "$ref": "#/definitions/models.User"
                             }
                         }
                     }
@@ -76,11 +135,43 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get a User by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.SelfUser"
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/utils/username": {
+            "get": {
+                "description": "Checks if a username is available",
+                "tags": [
+                    "utils"
+                ],
+                "summary": "Is a Username Available",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -139,10 +230,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.SelfUser": {
+        "models.Token": {
             "type": "object",
             "properties": {
-                "email": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UpdateSelf": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "created_at": {
                     "type": "string"
                 },
                 "id": {
@@ -151,15 +256,36 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "role": {
+                "public": {
+                    "type": "boolean"
+                },
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "models.Token": {
+        "models.User": {
             "type": "object",
             "properties": {
-                "token": {
+                "avatar": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "public": {
+                    "type": "boolean"
+                },
+                "username": {
                     "type": "string"
                 }
             }
