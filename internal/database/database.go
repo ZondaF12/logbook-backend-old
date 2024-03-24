@@ -23,6 +23,7 @@ type (
 	Handlers interface {
 		Authentication
 		Users
+		Vehicles
 		Utils
 	}
 
@@ -37,6 +38,14 @@ type (
 		GetUserByID(id uuid.UUID) (models.User, error)
 		AddNewUserToDB(user models.User) map[string]string
 		UpdateUserByID(id uuid.UUID, user models.User) (models.User, error)
+	}
+
+	Vehicles interface {
+		CheckUserVehicleExists(userId uuid.UUID, registration string) bool
+		AddNewVehicleToDB(userId uuid.UUID, vehicle models.NewVehicle) map[string]string
+		GetAuthenticatedUserVehicles(userId uuid.UUID) ([]models.Vehicle, error)
+		GetVehicleByID(vehicleId uuid.UUID) (models.Vehicle, error)
+		GetAuthUserVehicleByRegistration(userId uuid.UUID, registration string) (models.Vehicle, error)
 	}
 
 	Utils interface {

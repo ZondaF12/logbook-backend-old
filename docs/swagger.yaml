@@ -1,4 +1,19 @@
 definitions:
+  models.NewVehiclePostData:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      model:
+        type: string
+      nickname:
+        type: string
+      registration:
+        type: string
+    type: object
   models.Token:
     properties:
       token:
@@ -37,6 +52,48 @@ definitions:
         type: boolean
       username:
         type: string
+    type: object
+  models.Username:
+    properties:
+      username:
+        type: string
+    type: object
+  models.Vehicle:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      engine_size:
+        type: integer
+      id:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      insurance_date:
+        type: string
+      make:
+        type: string
+      model:
+        type: string
+      mot_date:
+        type: string
+      nickname:
+        type: string
+      registered:
+        type: string
+      registration:
+        type: string
+      service_date:
+        type: string
+      tax_date:
+        type: string
+      user_id:
+        type: string
+      year:
+        type: integer
     type: object
 info:
   contact: {}
@@ -137,8 +194,15 @@ paths:
       tags:
       - user
   /auth/utils/username:
-    get:
+    post:
       description: Checks if a username is available
+      parameters:
+      - description: username param
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Username'
       responses:
         "200":
           description: OK
@@ -147,6 +211,86 @@ paths:
       summary: Is a Username Available
       tags:
       - utils
+  /auth/vehicles:
+    get:
+      description: returns a list of vehicles for the authenticated user
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Vehicle'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Gets the vehicles for the authenticated user
+      tags:
+      - vehicles
+    post:
+      description: adds a vehicle to a user's account
+      parameters:
+      - description: vehicle params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewVehiclePostData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Add a user's vehicle
+      tags:
+      - vehicles
+  /auth/vehicles/:id:
+    get:
+      description: returns a vehicle object requested by ID
+      parameters:
+      - description: Vehicle ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Vehicle'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Gets a vehicle by ID
+      tags:
+      - vehicles
+  /auth/vehicles/registration/:reg:
+    get:
+      description: returns a vehicle object requested by registration
+      parameters:
+      - description: Registration
+        in: path
+        name: reg
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Vehicle'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Gets the authenticated user's vehicle by registration
+      tags:
+      - vehicles
   /health:
     get:
       description: get the database health

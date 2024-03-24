@@ -161,15 +161,148 @@ const docTemplate = `{
             }
         },
         "/auth/utils/username": {
-            "get": {
+            "post": {
                 "description": "Checks if a username is available",
                 "tags": [
                     "utils"
                 ],
                 "summary": "Is a Username Available",
+                "parameters": [
+                    {
+                        "description": "username param",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Username"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/vehicles": {
+            "get": {
+                "description": "returns a list of vehicles for the authenticated user",
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Gets the vehicles for the authenticated user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Vehicle"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "adds a vehicle to a user's account",
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Add a user's vehicle",
+                "parameters": [
+                    {
+                        "description": "vehicle params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NewVehiclePostData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/vehicles/:id": {
+            "get": {
+                "description": "returns a vehicle object requested by ID",
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Gets a vehicle by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Vehicle ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Vehicle"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/vehicles/registration/:reg": {
+            "get": {
+                "description": "returns a vehicle object requested by registration",
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Gets the authenticated user's vehicle by registration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Registration",
+                        "name": "reg",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Vehicle"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "type": "string"
                         }
@@ -230,6 +363,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.NewVehiclePostData": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "model": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "registration": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Token": {
             "type": "object",
             "properties": {
@@ -287,6 +443,70 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Username": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Vehicle": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "engine_size": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "insurance_date": {
+                    "type": "string"
+                },
+                "make": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "mot_date": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "string"
+                },
+                "registration": {
+                    "type": "string"
+                },
+                "service_date": {
+                    "type": "string"
+                },
+                "tax_date": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
                 }
             }
         }
